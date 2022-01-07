@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 let camera: Camera;
+
 export default function App() {
   const [startCamera, setStartCamera] = React.useState(false);
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const [capturedImage, setCapturedImage] = React.useState<any>(null);
+  const [kuehName, setKuehName] = React.useState<any>(null);
 
   const __startCamera = async () => {
     const { status } = await Camera.requestPermissionsAsync();
@@ -30,14 +32,51 @@ export default function App() {
     setPreviewVisible(true);
     setCapturedImage(photo);
   };
-  const __savePhoto = () => {
+  const __savePhoto = async () => {
     //SAVE AS BYTE
+    let baseURL = "http://127.0.0.1:5000/1234";
+    //let image = String.fromCharCode(capturedImage);
+
+    //let postAddress = baseURL.concat(image);
+
     //POST REQUEST TO CHENSAN
+    //setKuehName(__responseData());
+    setKuehName("curry puff");
+    console.log("kueh", kuehName);
+    //__resultPage();
+    Alert.alert(kuehName);
   };
   const __retakePicture = () => {
     setCapturedImage(null);
     setPreviewVisible(false);
     __startCamera();
+  };
+
+  //BROKEN FUNCTION,
+  const __responseData = () => {
+    let baseURL = "http://127.0.0.1:5000/";
+    return (
+      fetch(baseURL, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.text())
+        /*.then((json) => {
+        return json.food;
+      })*/
+        .catch((error) => {
+          console.error(error);
+        })
+    );
+  };
+
+  const __resultPage = async () => {
+    const photo: any = await camera.takePictureAsync();
+    console.log("kueh2", kuehName);
+    return <Text>{kuehName}</Text>;
   };
 
   return (
@@ -227,3 +266,9 @@ const CameraPreview = ({ photo, retakePicture, savePhoto }: any) => {
     </View>
   );
 };
+function StackNavigator(arg0: {
+  First: { screen: any };
+  Second: { screen: any };
+}): any {
+  throw new Error("Function not implemented.");
+}
